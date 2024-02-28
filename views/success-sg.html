@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #121212;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        flex-direction: column;
+    }
+    .welcome-text {
+        margin-bottom: 20px;
+    }
+    button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #db4437;
+        color: white;
+    }
+</style>
+</head>
+<body>
+
+<div class="welcome-text">
+    <h1>Welcome!</h1>
+    <p>You're now logged in.</p>
+</div>
+<button onclick="window.location='/api/v1/check-auth/logout';">Logout</button>
+<button onclick="window.location='/api/v1/check-auth/hehe-client';">Protected Route For Advisor</button>
+<button onclick="window.location='/api/v1/check-auth/hehe-advisor';">Protected Route For Client</button>
+
+</body>
+</html>

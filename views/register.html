@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Investment Advisor Portal</title>
+    <link rel="stylesheet" href="/styles/register.css">
+    <script src="register.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="navbar-left">
+                <img src="./logo.jfif" alt="Company Logo" class="logo">
+                <span class="company-name">inVEST</span>
+            </div>
+            <div class="navbar-right">
+                <a href="/api/v1/check-auth/home" class="btn">Home</a>
+            </div>
+        </nav>
+    </header>
+    <section class="register-section">
+        <div class="register-form">
+            <h2>Sign Up</h2>
+            <form action="/api/v1/check-auth/signup" method="POST" id="register-form">
+                <div class="form-group">
+                    <label for="first-name">Name:</label>
+                    <input type="text" id="first-name" name="name" required>
+                    <span class="error" id="first-name-error"></span>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                    <span class="error" id="email-error"></span>
+                </div>
+                <!-- <div class="form-group">
+                    <label for="dob">Date of Birth:</label>
+                    <input type="date" id="dob" name="dob" required>
+                    <span class="error" id="dob-error"></span>
+                </div> -->
+                <!-- <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+                    <span class="error" id="username-error"></span>
+                </div> -->
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                    <span class="error" id="password-error"></span>
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">Confirm Password:</label>
+                    <input type="password" id="confirm-password" name="confirmPassword" required>
+                    <span class="error" id="confirm-password-error"></span>
+                </div>
+                <button type="submit">Sign Up</button>
+                <button type="button"><a href="/api/v1/check-auth/signin-google">Continue with Google</a></button>
+            </form>
+            <p>Already a member? <a href="/api/v1/check-auth/login">Login</a></p>
+        </div>
+    </section>
+    <footer>
+        <div class="footer-buttons">
+            <a href="aboutus.html" class="footer-btn">About Us</a>
+            <a href="faq.html" class="footer-btn">FAQ</a>
+        </div>
+    </footer>
+    <script>
+        document.getElementById("register-form").addEventListener("submit", function(event) {
+            // Prevent default form submission behavior
+            event.preventDefault();
+
+            // Get form data
+            const formData = new FormData(event.target);
+
+            // Submit form data to questionnaire.html page using POST method
+            fetch('chooseadvisor.html', {
+                method: 'POST',
+                body: formData
+            }).then(response => {
+                // Handle response
+                console.log('Form submitted successfully');
+                // Optionally, redirect to another page after successful submission
+                window.location.href = 'chooseadvisor.html';
+            }).catch(error => {
+                console.error('Error submitting form:', error);
+            });
+        });
+    </script>
+</body>
+</html>
