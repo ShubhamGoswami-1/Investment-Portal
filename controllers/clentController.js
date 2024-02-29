@@ -5,7 +5,8 @@ const Plan = require("./../models/plansModel");
 const asyncErrorHandler = require("./../utils/asyncErrorHandler");
 
 exports.listOfAdvisors = asyncErrorHandler(async (req, res, next) => {
-    const listOfNamesOfAdvisors = await Advisor.find();
+    const listOfAdvisors = await Advisor.find();
+    const listOfNamesOfAdvisors = listOfAdvisors.map(advisor => advisor.name);
     
     res.status(200).json({
         status: 'success',
