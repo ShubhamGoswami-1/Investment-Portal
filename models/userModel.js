@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema({
     role: {
         type: String,
         enum: ['client', 'advisor'],
-        default: 'advisor',
+        default: 'client',
         required: true
     },
     OAuthId: String,

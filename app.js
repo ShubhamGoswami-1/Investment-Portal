@@ -6,6 +6,9 @@ const cookieParser = require("cookie-parser");
 const app = express();
 
 const checkAuthRouter = require('./routes/checkAuthRoutes');
+const advisorRouter = require("./routes/advisorRoutes");
+const clientRouter = require("./routes/clientRoutes");
+
 const globalErrorHandler = require('./controllers/errorController');
 
 // Development logging
@@ -24,6 +27,9 @@ app.use('/', (req, res, next) => {
     next();
 })
 app.use('/api/v1/check-auth', checkAuthRouter);
+app.use('/api/v1/advisor', advisorRouter);
+app.use('/api/v1/client', clientRouter);
+
 
 app.all('*', (req, res, next) => {
     // const err = new Error(`Can't find the url:${req.originalUrl} in this server`);
