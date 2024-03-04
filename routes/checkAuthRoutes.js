@@ -2,81 +2,63 @@ const express = require('express');
 const path = require("path");
 const passport = require("passport");
 
+const Advisor = require("./../models/advisorModel");
+
 const authController = require('./../controllers/authcontroller');
 const checkAuthProtectController = require('./../controllers/checkAuthProtectController');
 
 const router = express.Router();
 
 router.get('/home', (req, res) => {
-    // __dirname is the directory name of the current module, e.g., '/your-project-folder'
-    res.sendFile(path.join(__dirname, './../views', 'index.html'));
+    // res.sendFile(path.join(__dirname, './../views', 'index.html'));
+    res.render('index');
 });
 
 router.get('/signup', (req, res) => {
-    // __dirname is the directory name of the current module, e.g., '/your-project-folder'
-    res.sendFile(path.join(__dirname, './../views', 'register.html'));
+    res.render('register');
 });
 
 router.get('/login', (req, res) => {
-    // __dirname is the directory name of the current module, e.g., '/your-project-folder'
-    res.sendFile(path.join(__dirname, './../views', 'login.html'));
+    res.render('login');
 });
 
-router.get('/welcome-client', authController.protect, (req, res) => {
-    // __dirname is the directory name of the current module, e.g., '/your-project-folder'
-    res.sendFile(path.join(__dirname, './../views', 'welcomepage.html'));
+router.get('/welcome-client', authController.protect, async (req, res) => {
+    const advisors = await Advisor.find();
+    res.render('welcomepage', { advisors });
 });
 
 router.get('/welcome-advisor', authController.protect, (req, res) => {
-    // __dirname is the directory name of the current module, e.g., '/your-project-folder'
-    res.sendFile(path.join(__dirname, './../views', 'chooseadvisor.html'));
+    res.render('advisordashboard');
 });
-
 
 router.get('/client-dashboard', authController.protect, (req, res) => {
-    // __dirname is the directory name of the current module, e.g., '/your-project-folder'
-    res.sendFile(path.join(__dirname, './../views', 'clientdashboard.html'));
+    res.render('clientdashboard')
 });
 
-router.get('/adv1', authController.protect, (req, res) => {
-    // __dirname is the directory name of the current module, e.g., '/your-project-folder'
-    res.sendFile(path.join(__dirname, './../views', 'advisor1.html'));
+router.get('/add-plan', authController.protect, (req, res) => {
+    res.render('addplan')
 });
-router.get('/adv2', authController.protect, (req, res) => {
-    // __dirname is the directory name of the current module, e.g., '/your-project-folder'
-    res.sendFile(path.join(__dirname, './../views', 'advisor2.html'));
-});
-router.get('/adv3', authController.protect, (req, res) => {
-    // __dirname is the directory name of the current module, e.g., '/your-project-folder'
-    res.sendFile(path.join(__dirname, './../views', 'advisor3.html'));
-});
-router.get('/adv4', authController.protect, (req, res) => {
-    // __dirname is the directory name of the current module, e.g., '/your-project-folder'
-    res.sendFile(path.join(__dirname, './../views', 'advisor4.html'));
-});
-router.get('/adv5', authController.protect, (req, res) => {
-    // __dirname is the directory name of the current module, e.g., '/your-project-folder'
-    res.sendFile(path.join(__dirname, './../views', 'advisor5.html'));
+
+router.get('/adv/:advisorId', authController.protect, async (req, res) => {
+    const advisor = await Advisor.findById(req.params.advisorId);
+    const indexVal = req.query.index;
+    res.render('advisor1', { advisor, indexVal });
 });
 
 router.get('/forgot-password', (req, res) => {
-    // __dirname is the directory name of the current module, e.g., '/your-project-folder'
-    res.sendFile(path.join(__dirname, './../views', 'forgot_password.html'));
+    res.render('forgot_password')
 });
 
 router.get('/aboutus', (req, res) => {
-    // __dirname is the directory name of the current module, e.g., '/your-project-folder'
-    res.sendFile(path.join(__dirname, './../views', 'aboutus.html'));
+    res.render('aboutus');
 });
 
 router.get('/faq', (req, res) => {
-    // __dirname is the directory name of the current module, e.g., '/your-project-folder'
-    res.sendFile(path.join(__dirname, './../views', 'faq.html'));
+    res.render('faq');
 });
 
 router.get('/explore-features', (req, res) => {
-    // __dirname is the directory name of the current module, e.g., '/your-project-folder'
-    res.sendFile(path.join(__dirname, './../views', 'explorefeatures.html'));
+    res.render('explorefeatures');
 });
 
 router.get('/success', (req, res, next) => {res.sendFile(path.join(__dirname, './../views', 'success.html'))});

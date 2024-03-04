@@ -118,11 +118,11 @@ exports.logout = (req, res, next) => {
 
     // Set the cookie 'jwt' with an expired date, effectively deleting it
     res.cookie('jwt', 'loggedout', cookieOptions);
-    res.status(200).json({ 
-        status: 'success',
-        message: 'Logged Out !!! :)'
-    });
-    // res.redirect('/api/v1/check-auth/home');
+    // res.status(200).json({ 
+    //     status: 'success',
+    //     message: 'Logged Out !!! :)'
+    // });
+    res.redirect('/api/v1/check-auth/home');
 };
 
 
@@ -143,11 +143,10 @@ passport.use(new GoogleStrategy({
         user = await User.create({
           name: profile.displayName,
           email: profile.emails[0].value,
-          // You might not have a password for OAuth users, handle accordingly
-          password, // Consider a more secure approach
+          password,
           confirmPassword: password,
           OAuthId: profile.id
-          //   role: 'client', // Default role, adjust as necessary
+          //   role: 'client', // Default role
         });
       }
       done(null, user);

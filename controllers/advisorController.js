@@ -1,4 +1,7 @@
+const mongoose = require("mongoose");
+
 const Advisor = require("./../models/advisorModel");
+const Client = require("./../models/clientModel");
 const Plan = require('./../models/plansModel');
 
 const asyncErrorHandler = require('./../utils/asyncErrorHandler');
@@ -33,6 +36,8 @@ exports.addPlan = asyncErrorHandler(async (req, res, next) => {
             plan
         }
     });
+    
+    // res.redirect('/api/v1/check-auth/welcome-advisor');
 });
 
 exports.listOfPlans = asyncErrorHandler(async (req, res, next) => {
@@ -46,3 +51,26 @@ exports.listOfPlans = asyncErrorHandler(async (req, res, next) => {
         plans
     });
 })
+
+exports.topPlans = asyncErrorHandler(async (req, res, next) => {
+    const advisor = await Advisor.findOne({ userIdCredentials: req.user._id });
+    const plans = await Plan.find({ advisorId: advisor._id }).sort({ nuOfSubscription: -1 });
+
+    res.status(200).json({
+        status: 'success',
+        plans
+    });
+});
+
+exports.listOfClients = asyncErrorHandler(async(req, res, next) => {
+    const advisor = await Advisor.findOne({ userIdCredentials: req.user._id });
+
+    const clientObjectIds = advisor.clientIds.map(id => new mongoose.Types.ObjectId(id));
+
+    const clients = await Client.find({ _id: { $in: clientObjectIds }});
+
+    res.status(200).json({
+        status: 'success',
+        clients
+    });
+});

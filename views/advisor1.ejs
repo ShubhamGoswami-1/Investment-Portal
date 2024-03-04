@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advisor Page - Investment Advisor Portal</title>
+    <link rel="stylesheet" href="/styles/advisor.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="navbar-left">
+                <a href="/api/v1/check-auth/welcome-client"><img src="/images-logos/logo.jfif" alt="Company Logo" class="logo"></a>
+            </div>
+            <div class="navbar-right">
+                <a href="/api/v1/check-auth/welcome-client" class="btn">Home</a>
+                <a href="/api/v1/check-auth/client-dashboard" class="profile-btn"><img src="/images-logos/profile-pic.jpg" alt="Profile Logo"></a>
+                <a href="/api/v1/check-auth/home" class="btn">Logout</a>
+            </div>
+        </nav>
+    </header>
+    
+
+    <section class="advisor-section">
+        <div class="advisor-info">
+            <div class="advisor-details">
+                <img src="/images-logos/adv<%= indexVal %>.jpg" alt="Advisor Picture" class="advisor-pic">
+                <h2><%= advisor.name  %></h2>
+                <div class="ratings">
+                    <% for(let i = 0; i < Math.floor(advisor.ratings); i++) { %>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#FFD700" class="bi bi-star" viewBox="0 0 16 16">
+                            <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.56.56 0 0 0-.163-.505L1.71 6.745l4.052-.576a.53.53 0 0 0 .393-.288L8 2.223l1.847 3.658a.53.53 0 0 0 .393.288l4.052.575-2.906 2.77a.56.56 0 0 0-.163.506l.694 3.957-3.686-1.894a.5.5 0 0 0-.461 0z"/>
+                        </svg>
+                    <% } %>
+                    <% for(let j = 0; j < 5 - Math.floor(advisor.ratings); j++) { %>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentcolor" class="bi bi-star" viewBox="0 0 16 16">
+                            <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.56.56 0 0 0-.163-.505L1.71 6.745l4.052-.576a.53.53 0 0 0 .393-.288L8 2.223l1.847 3.658a.53.53 0 0 0 .393.288l4.052.575-2.906 2.77a.56.56 0 0 0-.163.506l.694 3.957-3.686-1.894a.5.5 0 0 0-.461 0z"/>
+                        </svg>
+                        
+                    <% } %>   
+                    <!-- <img src="/images-logos/star.png" alt="Star" class="star">
+                    <img src="/images-logos/star.png" alt="Star" class="star">
+                    <img src="/images-logos/star.png" alt="Star" class="star">
+                    <img src="/images-logos/star.png" alt="Star" class="star"> -->
+                </div>
+            </div>
+            <div class="portfolio-details">
+                <h2>Portfolio Details:</h2>
+                <h3>Risk Tolerance: Moderate</h3>
+                <h3>Portfolio Holdings:</h3>
+                <ol>
+                    <li>
+                        <strong>Company Name:</strong> ABC Corp
+                        <strong>Ticker Symbol:</strong> ABC
+                        <strong>Shares:</strong> 200
+                        <strong>Purchase Price:</strong> $50
+                        <strong>Current Price:</strong> $55
+                        <strong>Market Value:</strong> $11,000
+                        <strong>Allocation:</strong> 20%
+                    </li>
+                    <li>
+                        <strong>Company Name:</strong> XYZ Inc
+                        <strong>Ticker Symbol:</strong> XYZ
+                        <strong>Shares:</strong> 150
+                        <strong>Purchase Price:</strong> $30
+                        <strong>Current Price:</strong> $35
+                        <strong>Market Value:</strong> $5,250
+                        <strong>Allocation:</strong> 15%
+                    </li>
+                    <!-- Repeat similar structure for other holdings -->
+                </ol>
+                <p>Total Portfolio Value: $53,400</p>
+            </div>
+        </div>
+
+        <div class="plans-section">
+            <h2>Advisor's Plans</h2>
+            <div class="plans-container">
+                <!-- Advisor's plan cards -->
+                <a href="#" class="plan-card">
+                    <h3>Plan 1</h3>
+                    <p>Description of plan 1</p>
+                </a>
+                <a href="#" class="plan-card">
+                    <h3>Plan 2</h3>
+                    <p>Description of plan 2</p>
+                </a>
+                <a href="#" class="plan-card">
+                    <h3>Plan 3</h3>
+                    <p>Description of plan 3</p>
+                </a>
+                <a href="#" class="plan-card">
+                    <h3>Plan 4</h3>
+                    <p>Description of plan 4</p>
+                </a>
+                <a href="#" class="plan-card">
+                    <h3>Plan 5</h3>
+                    <p>Description of plan 5</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-buttons">
+            <a href="/api/v1/check-auth/aboutus" class="footer-btn">About Us</a>
+            <a href="/api/v1/check-auth/faq" class="footer-btn">FAQ</a>
+        </div>
+    </footer>
+</body>
+</html>

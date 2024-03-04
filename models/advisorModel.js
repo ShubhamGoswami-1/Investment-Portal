@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const advisorSchema = new mongoose.Schema({
     ratings: {
-        type: Number,
+        type: String,
         default: 5.0
     },
     name: {
@@ -20,6 +20,9 @@ const advisorSchema = new mongoose.Schema({
     userIdCredentials: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
+    },
+    clientIds: {
+        type: [String]
     }
 }, {
     collection: "advisors",

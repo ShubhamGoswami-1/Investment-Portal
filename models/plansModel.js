@@ -22,6 +22,10 @@ const plansSchema = new mongoose.Schema({
     advisorId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Advisor'
+    },
+    noOfSubscription: {
+        type: Number,
+        default: 0
     }
 }, {
     collection: "plans",

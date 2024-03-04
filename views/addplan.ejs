@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Plan - Investment Advisor Portal</title>
+    <link rel="stylesheet" href="/styles/addplan.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="navbar-left">
+                <img src="/images-logos/logo.jfif" alt="Company Logo" class="logo">
+                <span class="company-name">inVEST</span>
+            </div>
+            <div class="navbar-right">
+                <a href="/api/v1/check-auth/welcome-advisor" class="btn">Dashboard</a>
+                <a href="/api/v1/check-auth/home" class="btn">Logout</a>
+            </div>
+        </nav>
+    </header>
+    <section class="bg">
+        <!-- <section class="welcome-section">
+            <h2>Add New Plan</h2>
+        </section> -->
+
+        <section class="main-section">
+            <form class="add-plan-form" action="/api/v1/advisor/add-plans" method="POST">
+                <h2>Add Plan</h2>
+                <div class="form-group">
+                    <label for="capValue">Cap Value:</label>
+                    <input type="text" id="capValue" name="capValue" required>
+                </div>
+                <div class="form-group">
+                    <label for="maxVal">Max Value:</label>
+                    <input type="number" id="maxVal" name="maxVal" required>
+                </div>
+                <div class="form-group">
+                    <label for="returnProfit">Return Profit:</label>
+                    <input type="number" id="returnProfit" name="returnProfit" required>
+                </div>
+                <div class="form-group">
+                    <label for="risk">Risk:</label>
+                    <input type="text" id="risk" name="risk" required>
+                </div>
+                <div class="button-group">
+                    <button type="submit">Add Plan</button>
+                </div>
+            </form>
+        </section>
+    </section>
+    <footer class="footer">
+        <div class="footer-buttons">
+            <a href="/api/v1/check-auth/aboutus" class="footer-btn">About Us</a>
+            <a href="/api/v1/check-auth/faq" class="footer-btn">FAQ</a>
+        </div>
+    </footer>
+    
+</body>
+</html>
