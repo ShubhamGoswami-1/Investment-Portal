@@ -9,7 +9,6 @@ const checkAuthProtectController = require('./../controllers/checkAuthProtectCon
 
 const router = express.Router();
 
-router.get('/success', (req, res, next) => {res.sendFile(path.join(__dirname, './../views', 'success.html'))});
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);
 router.get('/logout', authController.protect, authController.logout);
