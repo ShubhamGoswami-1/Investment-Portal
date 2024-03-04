@@ -32,16 +32,16 @@ const createSendToken = (user, statusCode, res) => {
     res.cookie('jwt', token, cookieOptions);
 
     user.password = undefined;
-    // res.status(statusCode).json({
-    //     status: 'success',
-    //     token,
-    //     user
-    // });
-    if(user.role === 'client'){
-        res.redirect('/api/v1/check-auth/welcome-client');
-    } else {
-        res.redirect('/api/v1/check-auth/welcome-advisor');
-    }
+    res.status(statusCode).json({
+        status: 'success',
+        token,
+        user
+    });
+    // if(user.role === 'client'){
+    //     res.redirect('/api/v1/check-auth/welcome-client');
+    // } else {
+    //     res.redirect('/api/v1/check-auth/welcome-advisor');
+    // }
 }
 
 exports.signup = asyncErrorHandler(async (req, res, next) => {
@@ -118,11 +118,11 @@ exports.logout = (req, res, next) => {
 
     // Set the cookie 'jwt' with an expired date, effectively deleting it
     res.cookie('jwt', 'loggedout', cookieOptions);
-    // res.status(200).json({ 
-    //     status: 'success',
-    //     message: 'Logged Out !!! :)'
-    // });
-    res.redirect('/api/v1/check-auth/home');
+    res.status(200).json({ 
+        status: 'success',
+        message: 'Logged Out !!! :)'
+    });
+    // res.redirect('/api/v1/check-auth/home');
 };
 
 
