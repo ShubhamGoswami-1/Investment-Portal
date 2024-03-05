@@ -12,6 +12,10 @@ const transactionSchema = new mongoose.Schema({
     advisorId: {
         type:  mongoose.Schema.Types.ObjectId,
         ref: 'Advisor'
+    },
+    clientName: {
+        type: String,
+        required: [true, 'Need the client Name :)']
     }
 },
 {

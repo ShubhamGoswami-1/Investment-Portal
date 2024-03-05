@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const Advisor = require("./../models/advisorModel");
 const Client = require("./../models/clientModel");
 const Plan = require('./../models/plansModel');
+const Transaction = require("./../models/transactionModel");
 
 const asyncErrorHandler = require('./../utils/asyncErrorHandler');
 
@@ -74,3 +75,14 @@ exports.listOfClients = asyncErrorHandler(async(req, res, next) => {
         clients
     });
 });
+
+exports.getTransactions = asyncErrorHandler(async (req, res, next) => {
+    const advisor = await Advisor.findOne({ userIdCredentials: req.user._id });
+
+    const transactions = await Transaction.find({ advisorId: advisor._id });
+
+    res.status(200).json({
+        status: 'success',
+        transactions
+    });
+})

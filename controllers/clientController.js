@@ -50,7 +50,8 @@ exports.buyAPlan = asyncErrorHandler( async(req, res, next) => {
     const transaction = await Transaction.create({
         planId,
         advisorId,
-        clientId : req.user._id
+        clientId : req.user._id,
+        clientName: req.user.name
     });
 
     const advisor = await Advisor.findById(advisorId);
