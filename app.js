@@ -9,6 +9,8 @@ const checkAuthRouter = require('./routes/checkAuthRoutes');
 const advisorRouter = require("./routes/advisorRoutes");
 const clientRouter = require("./routes/clientRoutes");
 
+const AppError = require("./utils/appError");
+
 const globalErrorHandler = require('./controllers/errorController');
 
 // Development logging
