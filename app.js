@@ -2,6 +2,7 @@ const express = require("express");
 const morgan = require('morgan');
 const path = require("path");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 const app = express();
 
@@ -17,6 +18,11 @@ const globalErrorHandler = require('./controllers/errorController');
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
+
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}));
 
 app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
