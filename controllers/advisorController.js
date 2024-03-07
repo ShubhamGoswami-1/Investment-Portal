@@ -55,7 +55,10 @@ exports.listOfPlans = asyncErrorHandler(async (req, res, next) => {
 
 exports.topPlans = asyncErrorHandler(async (req, res, next) => {
     const advisor = await Advisor.findOne({ userIdCredentials: req.user._id });
-    const plans = await Plan.find({ advisorId: advisor._id }).sort({ nuOfSubscription: -1 });
+    const plans = await Plan
+    .find({ advisorId: advisor._id, noOfSubscription: { $ne: 0 } })
+    .sort({ noOfSubscription: -1 })
+    .limit(5);
 
     res.status(200).json({
         status: 'success',
@@ -119,5 +122,5 @@ exports.totalCummulativeInvestedAmounts = asyncErrorHandler(async (req, res, nex
     });
 })
 
-// 1. cummalative return for all clients of a particular advisor
-
+// 1. cummalative return for all transactions
+//  --- First need to find the profit of each plan
