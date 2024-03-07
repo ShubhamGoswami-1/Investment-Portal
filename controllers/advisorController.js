@@ -76,6 +76,15 @@ exports.listOfClients = asyncErrorHandler(async(req, res, next) => {
     });
 });
 
+exports.getOwndetails = asyncErrorHandler(async (req, res, next) => {
+    const advisor = await Advisor.findOne({userIdCredentials: req.user._id});
+
+    res.status(200).json({
+        status: 'success',
+        advisor
+    });
+}) 
+
 exports.getTransactions = asyncErrorHandler(async (req, res, next) => {
     const advisor = await Advisor.findOne({ userIdCredentials: req.user._id });
 

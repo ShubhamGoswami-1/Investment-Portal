@@ -41,11 +41,6 @@ app.use('/api/v1/client', clientRouter);
 
 
 app.all('*', (req, res, next) => {
-    // const err = new Error(`Can't find the url:${req.originalUrl} in this server`);
-    // err.status = "fail";
-    // err.statusCode = 404;
-    // next(err);
-
     next(new AppError(`Can't find the URL: ${req.originalUrl} in this server! :(`, 404));
 })
 
