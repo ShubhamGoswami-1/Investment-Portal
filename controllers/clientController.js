@@ -47,15 +47,22 @@ exports.listOfPlans = asyncErrorHandler(async (req, res, next) => {
 exports.buyAPlan = asyncErrorHandler( async(req, res, next) => {
     const planId = req.params.planId;
     const advisorId = req.params.advisorId;
+    const plan = await Plan.findById(planId);
+    const planStatsObj = plan.stocks.map(stock => ({
+        stockName: stock.stockName,
+        contriAmount: (stock.contri / 100) * req.body.investedAmount
+    }));
+
     const transaction = await Transaction.create({
         planId,
         advisorId,
         clientId : req.user._id,
-        clientName: req.user.name
+        clientName: req.user.name,
+        investedAmount: req.body.investedAmount,
+        planStats: planStatsObj
     });
 
     const advisor = await Advisor.findById(advisorId);
-    const plan = await Plan.findById(planId);
     const client = await Client.findOne({ userIdCredentials: req.user._id });
 
     if(!advisor.clientIds){
@@ -63,8 +70,10 @@ exports.buyAPlan = asyncErrorHandler( async(req, res, next) => {
         advisor.clientIds.push(client._id.toString());
         await advisor.save()
     } else {
-        advisor.clientIds.push(client._id.toString());
-        await advisor.save();
+        if (!advisor.clientIds.includes(client._id.toString())) {
+            advisor.clientIds.push(client._id.toString());
+            await advisor.save();
+        }
     }
 
     if(!client.advisorIds){

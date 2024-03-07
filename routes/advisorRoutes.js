@@ -12,5 +12,7 @@ router.get('/list-of-plans', authController.protect, authController.restrictTo('
 router.get('/list-of-plans-with-more-subscriptions', authController.protect, authController.restrictTo('advisor'), advisorController.topPlans);
 router.get('/list-of-clients', authController.protect, authController.restrictTo('advisor'), advisorController.listOfClients)
 router.get('/get-latest-transactions-of-own-plans', authController.protect, authController.restrictTo('advisor'), advisorController.getTransactions);
+router.get('/get-no-of-clients', authController.protect, authController.restrictTo('advisor'), advisorController.getNoOfClients);
+router.get('/get-tatal-invested-amount', authController.protect, authController.restrictTo('advisor'), advisorController.totalCummulativeInvestedAmounts);
 
 module.exports = router;

@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const advisorCategorySchema = new mongoose.Schema({
     name: {
         type: String,
-        enum: ['standard', 'premium', "executive"]
+        enum: ['standard', 'premium', 'executive']
     },
     subscriptionCharges: {
         type: Map,

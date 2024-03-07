@@ -95,3 +95,29 @@ exports.getTransactions = asyncErrorHandler(async (req, res, next) => {
         transactions
     });
 })
+
+exports.getNoOfClients = asyncErrorHandler(async (req, res, next) => {
+
+    const advisor = await Advisor.findOne({ userIdCredentials: req.user._id });
+
+    res.status(200).json({
+        status: 'success',
+        noOfClients: advisor.clientIds.length
+    });
+})
+
+exports.totalCummulativeInvestedAmounts = asyncErrorHandler(async (req, res, next) => {
+    const advisor = await Advisor.findOne({ userIdCredentials: req.user._id });
+
+    const transactions = await Transaction.find({ advisorId: advisor._id });
+
+    const totalInvestedAmount = transactions.reduce((total, trsc) => total + trsc.investedAmount, 0);
+
+    res.status(200).json({
+        status: 'success',
+        totalInvestedAmount
+    });
+})
+
+// 1. cummalative return for all clients of a particular advisor
+
