@@ -67,8 +67,6 @@ exports.buyAPlan = asyncErrorHandler( async(req, res, next) => {
         planStats: planStatsObj
     });
 
-
-
     if(!advisor.clientIds){
         advisor.clientIds = [];
         advisor.clientIds.push(client._id.toString());
@@ -126,5 +124,47 @@ exports.listOfSubscribedPlans = asyncErrorHandler(async (req, res, next) => {
     res.status(200).json({
         status: 'success',
         transactions
+    });
+})
+
+exports.listOfSubscribedPlansDetails = asyncErrorHandler( async(req, res, next) => {
+    const client = await Client.findOne({ userIdCredentials: req.user._id });
+
+    const transactions = await Transaction.find({ clientId: client._id });
+
+    let totalCumulativeProfit = 0;
+    let profits = [];
+
+    transactions.forEach(transaction => {
+        let totalProfit = 0; // Initialize total profit for each transaction separately
+
+        transaction.planStats.forEach(stat => {
+            // Generate a random value between -0.03 and 0.05
+            const randomMultiplier = Math.random() * (0.05 + 0.03) - 0.03;
+            const profitForStat = stat.contriAmount * randomMultiplier;
+            console.log(`${stat.contriAmount} : `, randomMultiplier, "Profit: ", profitForStat);
+
+            totalProfit += profitForStat; // Calculate profit for each stat
+        });
+
+        console.log("*********************************")
+        const cumulativeProfit = transaction.investedAmount + totalProfit;
+        console.log("Profit from this plan: ", totalProfit)
+        console.log("Initial Invested Amount in this plan: ", transaction.investedAmount)
+        console.log("Return from this plan: ", cumulativeProfit)
+        console.log();
+        console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+        console.log()
+        totalCumulativeProfit += cumulativeProfit;
+        profitElement = {
+            planId: transaction.planId,
+            profit: totalProfit
+        }
+        profits.push(profitElement);
+    });
+
+    res.status(200).json({
+        status: 'success',
+        profits
     });
 })
