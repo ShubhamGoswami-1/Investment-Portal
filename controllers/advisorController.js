@@ -42,16 +42,28 @@ exports.addPlan = asyncErrorHandler(async (req, res, next) => {
 });
 
 exports.listOfPlans = asyncErrorHandler(async (req, res, next) => {
+    const advisor = await Advisor.findOne({ userIdCredentials: req.user._id });
+    const plans = await Plan.find({ advisorId: advisor._id });
 
-    const advisor = await Advisor.findOne({userIdCredentials: req.user._id});
-
-    const plans = await Plan.find({advisorId: advisor._id});
+    const plansWithRandomValues = plans.map(plan => {
+        const planWithRandomValues = plan.toObject(); // Convert Mongoose document to plain JavaScript object
+        planWithRandomValues.stocks = plan.stocks.map(stock => {
+            const randomMultiplier = (Math.random() * (0.05 + 0.03) - 0.03) * 100;
+            const currentDayValue = randomMultiplier.toFixed(2); // Limiting to 2 decimal places
+            return {
+                ...stock.toObject(), // Convert Mongoose document to plain JavaScript object
+                currentDayValue
+            };
+        });
+        return planWithRandomValues;
+    });
 
     res.status(200).json({
         status: 'success',
-        plans
+        plans: plansWithRandomValues
     });
-})
+});
+
 
 exports.topPlans = asyncErrorHandler(async (req, res, next) => {
     const advisor = await Advisor.findOne({ userIdCredentials: req.user._id });
@@ -122,5 +134,42 @@ exports.totalCummulativeInvestedAmounts = asyncErrorHandler(async (req, res, nex
     });
 })
 
-// 1. cummalative return for all transactions
-//  --- First need to find the profit of each plan
+// 1. cummalative return for all transactions (Profit means +ve/-ve)
+//  --- First need to find the profit of each plan (Profit means +ve/-ve)
+//  -----  First need to find the profit of each stock in a plan (Profit means +ve/-ve)
+
+exports.cummulativeCurrentProfit = asyncErrorHandler(async (req, res, next) => {
+    const advisor = await Advisor.findOne({ userIdCredentials: req.user._id });
+
+    const transactions = await Transaction.find({ advisorId: advisor._id });
+
+    let totalCumulativeProfit = 0;
+
+    transactions.forEach(transaction => {
+        let totalProfit = 0; // Initialize total profit for each transaction separately
+
+        transaction.planStats.forEach(stat => {
+            // Generate a random value between -0.03 and 0.05
+            const randomMultiplier = Math.random() * (0.05 + 0.03) - 0.03;
+            const profitForStat = stat.contriAmount * randomMultiplier;
+            console.log(`${stat.contriAmount} : `, randomMultiplier, "Profit: ", profitForStat);
+
+            totalProfit += profitForStat; // Calculate profit for each stat
+        });
+
+        console.log("*********************************")
+        const cumulativeProfit = transaction.investedAmount + totalProfit;
+        console.log("Profit from this plan: ", totalProfit)
+        console.log("Initial Invested Amount in this plan: ", transaction.investedAmount)
+        console.log("Return from this plan: ", cumulativeProfit)
+        console.log();
+        console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+        console.log()
+        totalCumulativeProfit += cumulativeProfit;
+    });
+
+    res.status(200).json({
+        status: 'success',
+        totalCumulativeProfit
+    });
+});

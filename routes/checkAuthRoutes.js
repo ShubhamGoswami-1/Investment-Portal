@@ -15,6 +15,9 @@ router.get('/logout', authController.protect, authController.logout);
 router.get('/hehe-client', authController.protect, authController.restrictTo('client'), checkAuthProtectController.badhiyaHai);
 router.get('/hehe-advisor', authController.protect, authController.restrictTo('advisor'), checkAuthProtectController.badhiyaHai);
 
+router.post('/forgotPassword', authController.forgotPassword);
+router.patch('/resetPassword/:token', authController.resetPassword)
+
 router.get('/signin-google', passport.authenticate('google', { scope: ['profile', 'email'] })); //http://localhost:3000/ap1/v1/check-auth/signin-google
 router.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login', session: false }), authController.OauthJWTtoken);
 
