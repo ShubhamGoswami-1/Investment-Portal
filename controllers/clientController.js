@@ -45,9 +45,14 @@ exports.listOfPlans = asyncErrorHandler(async (req, res, next) => {
 })
 
 exports.buyAPlan = asyncErrorHandler( async(req, res, next) => {
+
     const planId = req.params.planId;
     const advisorId = req.params.advisorId;
+  
     const plan = await Plan.findById(planId);
+    const client = await Client.findOne({ userIdCredentials: req.user._id });
+    const advisor = await Advisor.findById(advisorId);
+
     const planStatsObj = plan.stocks.map(stock => ({
         stockName: stock.stockName,
         contriAmount: (stock.contri / 100) * req.body.investedAmount
@@ -56,14 +61,13 @@ exports.buyAPlan = asyncErrorHandler( async(req, res, next) => {
     const transaction = await Transaction.create({
         planId,
         advisorId,
-        clientId : req.user._id,
-        clientName: req.user.name,
+        clientId : client._id,
+        clientName: client.name,
         investedAmount: req.body.investedAmount,
         planStats: planStatsObj
     });
 
-    const advisor = await Advisor.findById(advisorId);
-    const client = await Client.findOne({ userIdCredentials: req.user._id });
+
 
     if(!advisor.clientIds){
         advisor.clientIds = [];
@@ -83,8 +87,12 @@ exports.buyAPlan = asyncErrorHandler( async(req, res, next) => {
         client.planIds.push(plan._id.toString());
         await client.save();
     } else {
-        client.advisorIds.push(advisor._id.toString());
-        client.planIds.push(plan._id.toString());
+        if (!client.advisorIds.includes(advisor._id.toString())){
+            client.advisorIds.push(advisor._id.toString());
+        }
+        if(!client.planIds.includes(plan._id.toString())){
+            client.planIds.push(plan._id.toString());
+        }
         await client.save();
     }
 
@@ -107,5 +115,16 @@ exports.listOfAdvisors = asyncErrorHandler(async (req, res, next) => {
     res.status(200).json({
         status: 'success',
         advisors
+    });
+})
+
+exports.listOfSubscribedPlans = asyncErrorHandler(async (req, res, next) => {
+    const client = await Client.findOne({ userIdCredentials: req.user._id });
+
+    const transactions = await Transaction.find({ clientId: client._id });
+
+    res.status(200).json({
+        status: 'success',
+        transactions
     });
 })

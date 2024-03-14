@@ -10,5 +10,6 @@ router.get('/get-all-advisors', authController.protect, authController.restrictT
 router.get('/list-of-plans/:advisorId', authController.protect, authController.restrictTo('client'), clientController.listOfPlans)
 router.post('/buyPlan/advisor/:advisorId/plan/:planId', authController.protect, authController.restrictTo('client'), clientController.buyAPlan);
 router.get('/getAdvisors', authController.protect, authController.restrictTo('client'), clientController.listOfAdvisors);
+router.get('/get-subscribed-plans', authController.protect, authController.restrictTo('client'), clientController.listOfSubscribedPlans);
 
 module.exports = router;
