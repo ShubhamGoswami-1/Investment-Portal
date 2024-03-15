@@ -6,6 +6,7 @@ const Plan = require("../models/plansModel");
 const Transaction = require("../models/transactionModel");
 
 const asyncErrorHandler = require("../utils/asyncErrorHandler");
+const AppError = require('../utils/appError');
 
 exports.register = asyncErrorHandler(async (req, res, next) => {
 
@@ -36,8 +37,13 @@ exports.listOfPlans = asyncErrorHandler(async (req, res, next) => {
 
     const advisorId = req.params.advisorId;
 
-    const plans = await Plan.find({advisorId});
+    const client = await Client.findOne({ userIdCredentials: req.user._id });
 
+    const plans = await Plan.find({ 
+        advisorId,
+        _id: { $nin: client.planIds } 
+    });
+        
     res.status(200).json({
         status: 'success',
         plans
@@ -52,6 +58,10 @@ exports.buyAPlan = asyncErrorHandler( async(req, res, next) => {
     const plan = await Plan.findById(planId);
     const client = await Client.findOne({ userIdCredentials: req.user._id });
     const advisor = await Advisor.findById(advisorId);
+
+    if(client.planIds.includes(plan._id)){
+        return next(new AppError('This plan u already buied u moron!!! (⩺_⩹)', 400));
+    }
 
     const planStatsObj = plan.stocks.map(stock => ({
         stockName: stock.stockName,
