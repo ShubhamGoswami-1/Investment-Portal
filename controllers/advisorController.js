@@ -144,10 +144,11 @@ exports.cummulativeCurrentProfit = asyncErrorHandler(async (req, res, next) => {
     const transactions = await Transaction.find({ advisorId: advisor._id });
 
     let totalCumulativeProfit = 0;
+    let totalInvestedAmount = 0;
 
     transactions.forEach(transaction => {
         let totalProfit = 0; // Initialize total profit for each transaction separately
-
+        totalInvestedAmount += transaction.investedAmount;
         transaction.planStats.forEach(stat => {
             // Generate a random value between -0.03 and 0.05
             const randomMultiplier = Math.random() * (0.05 + 0.03) - 0.03;
@@ -170,6 +171,8 @@ exports.cummulativeCurrentProfit = asyncErrorHandler(async (req, res, next) => {
 
     res.status(200).json({
         status: 'success',
-        totalCumulativeProfit
+        totalInvestedAmount,
+        totalCumulativeReturn: totalCumulativeProfit,
+        totalCumulativeProfit: totalCumulativeProfit - totalInvestedAmount
     });
 });
