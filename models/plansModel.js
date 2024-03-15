@@ -7,6 +7,10 @@ const keyValueSchema = new mongoose.Schema({
 });
 
 const plansSchema = new mongoose.Schema({
+    planName: {
+        type: String,
+        required: [true, 'Need to name a plan!!!']
+    },
     capValue: {
         type: Number,
         // Sum of Investment amounts by clients (those who buyied this plan)
