@@ -178,3 +178,12 @@ exports.listOfSubscribedPlansDetails = asyncErrorHandler( async(req, res, next) 
         profits
     });
 })
+
+exports.browseAllPlans = asyncErrorHandler(async (req, res, next) => {
+    const plans = await Plan.find();
+
+    res.status(200).json({
+        status: 'success',
+        plans
+    })
+});
