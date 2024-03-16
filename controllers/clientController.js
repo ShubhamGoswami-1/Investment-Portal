@@ -59,6 +59,10 @@ exports.buyAPlan = asyncErrorHandler( async(req, res, next) => {
     const client = await Client.findOne({ userIdCredentials: req.user._id });
     const advisor = await Advisor.findById(advisorId);
 
+    if(!client){
+        return next(new AppError('U need to first register urself to make profile!!!', 404));
+    }
+
     if(client.planIds.includes(plan._id)){
         return next(new AppError('This plan u already buied u moron!!! (⩺_⩹)', 400));
     }
