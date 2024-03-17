@@ -215,3 +215,12 @@ exports.getAdvisor = asyncErrorHandler(async (req, res, next) => {
         advisor
     });
 })
+
+exports.getOwnDetails = asyncErrorHandler(async (req, res, next) => {
+    const client = await Client.findOne({ userIdCredentials: req.user._id });
+
+    res.status(200).json({
+        status: 'success',
+        client
+    });
+})
