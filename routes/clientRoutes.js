@@ -13,5 +13,7 @@ router.get('/getAdvisors', authController.protect, authController.restrictTo('cl
 router.get('/get-subscribed-plans', authController.protect, authController.restrictTo('client'), clientController.listOfSubscribedPlans);
 router.get('/get-returns-of-subscribed-plans', authController.protect, authController.restrictTo('client'), clientController.listOfSubscribedPlansDetails)
 router.get('/get-all-plans', authController.protect, authController.restrictTo('client'), clientController.browseAllPlans);
+router.get('/getAdvisor/:advisorId', authController.protect, authController.restrictTo('client'), clientController.getAdvisor);
+router.get('/get-own-details', authController.protect, authController.restrictTo('client'), clientController.getOwnDetails);
 
 module.exports = router;
