@@ -18,6 +18,10 @@ const clientSchema = new mongoose.Schema({
     },
     planIds: {
         type: [String]
+    },
+    photoId: {
+        data: Buffer, // Store image data as buffer
+        contentType: String // Store image content type
     }
 },  {
     collection: "clients",

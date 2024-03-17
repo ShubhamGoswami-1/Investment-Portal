@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const bodyParser = require('body-parser');
 
 const app = express();
 
@@ -18,6 +19,10 @@ const globalErrorHandler = require('./controllers/errorController');
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
+
+// Parse JSON bodies
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
 app.use(cors({
   origin: 'http://localhost:3000',

@@ -13,14 +13,27 @@ exports.register = asyncErrorHandler(async (req, res, next) => {
     const clientObj = {
         name: req.user.name,
         email: req.user.email,
-        userIdCredentials: req.user._id
+        userIdCredentials: req.user._id,
+        photoId: {
+            data: new Buffer.from(req.body.photoId, 'base64'),
+            contentType: req.body.contentType
+        }   
     };
 
     const client = await Client.create({...clientObj});
 
+    // Convert the buffer to a base64-encoded string
+    const base64ImageData = client.photoId.data.toString('base64');
+
     res.status(201).json({
         status: 'success',
-        client
+        client: {
+                ...client.toObject(),
+                photoId: {
+                    ...client.photoId.toObject(),
+                    data: base64ImageData
+                }
+            }
     });
 })
 
@@ -191,3 +204,14 @@ exports.browseAllPlans = asyncErrorHandler(async (req, res, next) => {
         plans
     })
 });
+
+exports.getAdvisor = asyncErrorHandler(async (req, res, next) => {
+    const advisorId = req.params.advisorId;
+
+    const advisor = await Advisor.findById(advisorId);
+
+    res.status(200).json({
+        status: 'success',
+        advisor
+    });
+})
