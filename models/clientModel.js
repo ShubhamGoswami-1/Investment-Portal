@@ -13,10 +13,54 @@ const clientSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    advisorIds: {
-        type: [String]
+    age: {
+        type: String,
+        default: ""
+    },
+    address: {
+        type: String,
+        default: ""
+    },
+    agreement: {
+        type: Boolean,
+        default: true
+    },
+    gender: {
+        type: String,
+        enum: ['male', 'female', 'other'], 
+    },
+    jobRole: {
+        type: String,
+        default: ""
+    },
+    qualification: {
+        type: String,
+        default: ""
+    },
+    question_0: {
+        type: String,
+        default: ""
+    },
+    question_1: {
+        type: String,
+        default: ""
+    },
+    question_2: {
+        type: String,
+        default: ""
+    },
+    question_3: {
+        type: String,
+        default: ""
+    },
+    question_4: {
+        type: String,
+        default: ""
     },
     planIds: {
+        type: [String]
+    },
+    advisorIds: {
         type: [String]
     },
     photoId: {

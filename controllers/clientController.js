@@ -17,7 +17,18 @@ exports.register = asyncErrorHandler(async (req, res, next) => {
         photoId: {
             data: new Buffer.from(req.body.photoId, 'base64'),
             contentType: req.body.contentType
-        }   
+        },
+        address: req.body.address,
+        age: req.body.age,
+        gender: req.body.gender,
+        jobRole: req.body.jobRole,
+        qualification: req.body.qualification,
+        agreement: req.body.agreement,
+        question_0: req.body.question_0,
+        question_1: req.body.question_1,
+        question_2: req.body.question_2,
+        question_3: req.body.question_3,
+        question_4: req.body.question_4
     };
 
     const client = await Client.create({...clientObj});
