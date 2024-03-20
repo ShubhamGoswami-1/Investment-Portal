@@ -160,9 +160,17 @@ exports.listOfSubscribedPlans = asyncErrorHandler(async (req, res, next) => {
 
     const transactions = await Transaction.find({ clientId: client._id });
 
+    const AdvisorNames = transactions.map(transaction => {
+        return {
+            ...transaction.toObject(),
+            advisorName: transaction.advisorId.name // Assuming 'name' is the field representing the advisor's name in the Advisor model
+        };
+    });
+
     res.status(200).json({
         status: 'success',
-        transactions
+        transactions,
+        AdvisorNames
     });
 })
 
