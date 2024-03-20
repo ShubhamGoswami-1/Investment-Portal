@@ -56,6 +56,10 @@ const plansSchema = new mongoose.Schema({
             message: props => `Total contribution should sum up to 100`
         },
         required: [true, 'Stocks need to be added']
+    },
+    isActive: {
+        type: Boolean,
+        default: true
     }
 }, {
     collection: "plans",
