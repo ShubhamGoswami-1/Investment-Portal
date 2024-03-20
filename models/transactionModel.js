@@ -11,6 +11,10 @@ const transactionSchema = new mongoose.Schema({
         type:  mongoose.Schema.Types.ObjectId,
         ref: 'Plan'
     },
+    planName: {
+        type: String,
+        default: ""
+    },
     clientId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Client'

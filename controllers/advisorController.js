@@ -176,3 +176,16 @@ exports.cummulativeCurrentProfit = asyncErrorHandler(async (req, res, next) => {
         totalCumulativeProfit: totalCumulativeProfit - totalInvestedAmount
     });
 });
+
+exports.deletePlan = asyncErrorHandler(async (req, res, next) => {
+    const planId = req.params.planId;
+    const plan = await Plan.findByIdAndUpdate(planId, {
+        isActive : false
+    }, { new: true });
+
+    res.status(200).json({
+        status: 'success',
+        message: "Plan Deleted !!! :) ",
+        plan
+    });
+})
