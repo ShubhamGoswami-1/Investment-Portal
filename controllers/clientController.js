@@ -15,8 +15,8 @@ exports.register = asyncErrorHandler(async (req, res, next) => {
         email: req.user.email,
         userIdCredentials: req.user._id,
         photoId: {
-            data: new Buffer.from(req.body.photoId, 'base64'),
-            contentType: req.body.contentType
+            data: new Buffer.from(req.body.photoId.data, 'base64'),
+            contentType: req.body.photoId.contentType
         },
         address: req.body.address,
         age: req.body.age,
