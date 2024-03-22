@@ -160,9 +160,19 @@ exports.listOfSubscribedPlans = asyncErrorHandler(async (req, res, next) => {
 
     const transactions = await Transaction.find({ clientId: client._id });
 
+    const AdvisorIds = transactions.map(transaction => {
+        return transaction.advisorId
+    });
+
+    const advisorNames = await Promise.all(AdvisorIds.map(async (id) => {
+        const advisor = await Advisor.findById(id).select('name');
+        return advisor.name; // Return the name of the advisor
+    }));
+
     res.status(200).json({
         status: 'success',
-        transactions
+        transactions,
+        advisorNames
     });
 })
 
