@@ -18,6 +18,10 @@ exports.register = asyncErrorHandler(async (req, res, next) => {
             data: new Buffer.from(req.body.photoId.data, 'base64'),
             contentType: req.body.photoId.contentType
         },
+        profilePhoto: {
+            data: new Buffer.from(req.body.profilePhoto.data, 'base64'),
+            contentType: req.body.profilePhoto.contentType
+        },
         address: req.body.address,
         age: req.body.age,
         gender: req.body.gender,
@@ -244,5 +248,17 @@ exports.getOwnDetails = asyncErrorHandler(async (req, res, next) => {
     res.status(200).json({
         status: 'success',
         client
+    });
+})
+
+exports.editProfile = asyncErrorHandler(async (req, res, next) => {
+    const clientObj = {...req.body};
+    const client = await Client.findOne({ userIdCredentials: req.user._id });
+ 
+    const updatedClient = await Client.findByIdAndUpdate(client._id, clientObj, {new: true });
+ 
+    res.status(200).json({
+        status: 'success',
+        updatedClient
     });
 })

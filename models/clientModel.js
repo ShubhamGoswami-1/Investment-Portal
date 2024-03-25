@@ -66,6 +66,10 @@ const clientSchema = new mongoose.Schema({
     photoId: {
         data: Buffer, // Store image data as buffer
         contentType: String // Store image content type
+    },
+    profilePhoto: {
+        data: Buffer, // Store image data as buffer
+        contentType: String // Store image content type
     }
 },  {
     collection: "clients",

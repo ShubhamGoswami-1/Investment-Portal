@@ -11,6 +11,7 @@ const dotenv = require("dotenv");
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const User = require('./../models/userModel');
+const Client = require('./../models/clientModel');
 const { appendFile } = require('fs');
 
 dotenv.config({ path: './config.env' });
@@ -26,7 +27,7 @@ const createSendToken = (user, statusCode, res) => {
 
     const cookieOptions = {
         expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
-        httpOnly: true
+        httpOnly: false
     };
 
     // if(process.env.NODE_ENV === 'production'x){
@@ -195,34 +196,101 @@ exports.resetPassword = asyncErrorHandler(async(req, res, next) => {
 
 // *************************************************************************************************************************************
 
+// passport.use(new GoogleStrategy({
+//     clientID: process.env.GOOGLE_CLIENT_ID,
+//     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+//     callbackURL: "/api/v1/check-auth/auth/google/callback",
+//     passReqToCallback: true
+//   },
+//   async function (request, accessToken, refreshToken, profile, done)  {
+//     try {
+//       let user = await User.findOne({ email: profile.emails[0].value });
+//       if (!user) {
+//         // Create a new user if one doesn't exist
+//         const password = await bcrypt.hash(profile.id, 12);
+//         user = await User.create({
+//           name: profile.displayName,
+//           email: profile.emails[0].value,
+//           password,
+//           confirmPassword: password,
+//           OAuthId: profile.id
+//           //   role: 'client', // Default role
+//         });
+//       }
+//       done(null, user);
+//     } catch (error) {
+//       done(error, false);
+//     }
+//   }
+// ));
+
+// exports.OauthJWTtoken = (req, res, next) => {
+//     createSendToken(req.user, 200, res);
+// }
+
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: "/api/v1/check-auth/auth/google/callback",
     passReqToCallback: true
-  },
-  async function (request, accessToken, refreshToken, profile, done)  {
+    },
+    async function (request, accessToken, refreshToken, profile, done)  {
     try {
-      let user = await User.findOne({ email: profile.emails[0].value });
-      if (!user) {
+        let user = await User.findOne({ email: profile.emails[0].value });
+        if (!user) {
         // Create a new user if one doesn't exist
         const password = await bcrypt.hash(profile.id, 12);
         user = await User.create({
-          name: profile.displayName,
-          email: profile.emails[0].value,
-          password,
-          confirmPassword: password,
-          OAuthId: profile.id
-          //   role: 'client', // Default role
+            name: profile.displayName,
+            email: profile.emails[0].value,
+            password,
+            confirmPassword: password,
+            OAuthId: profile.id,
+            isSSOUser: true
         });
-      }
-      done(null, user);
+        }
+        done(null, user);
     } catch (error) {
-      done(error, false);
+        done(error, false);
     }
-  }
+    }
 ));
-
-exports.OauthJWTtoken = (req, res, next) => {
-    createSendToken(req.user, 200, res);
-}
+ 
+passport.serializeUser((user, cb) => {
+    console.log("Serializing User: ", user);
+    cb(null, user.email);
+})
+ 
+passport.deserializeUser(async( email, cb ) => {
+    const user = await User.findOne({ email }).catch((err) => {
+        console.log("Error in deserializing: ", err);
+        cb(err, null)
+    });
+ 
+    console.log("Deserialized User:", user);
+ 
+    if(user){
+        cb(null, user);
+    }
+})
+ 
+exports.OauthJWTtoken = asyncErrorHandler(async(req, res, next) => {
+    const token = jwt.sign({ email: req.user.email }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRES_IN
+    });
+ 
+    const cookieOptions = {
+        expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
+        httpOnly: true
+    };
+ 
+    res.cookie('jwt', token, cookieOptions);
+    const user = await User.findById(req.user);
+    const registeredUser = await Client.findOne({ userIdCredentials: user._id });
+    if(!registeredUser){
+        res.redirect("http://localhost:3000/clform");
+    } else {
+        res.redirect("http://localhost:3000/cldash")
+    }
+   
+})

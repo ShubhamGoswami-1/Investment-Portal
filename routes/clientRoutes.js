@@ -15,5 +15,6 @@ router.get('/get-returns-of-subscribed-plans', authController.protect, authContr
 router.get('/get-all-plans', authController.protect, authController.restrictTo('client'), clientController.browseAllPlans);
 router.get('/getAdvisor/:advisorId', authController.protect, authController.restrictTo('client'), clientController.getAdvisor);
 router.get('/get-own-details', authController.protect, authController.restrictTo('client'), clientController.getOwnDetails);
+router.patch('/edit-profile',authController.protect, authController.restrictTo('client'), clientController.editProfile);
 
 module.exports = router;
