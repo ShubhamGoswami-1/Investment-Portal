@@ -60,6 +60,10 @@ const plansSchema = new mongoose.Schema({
     isActive: {
         type: Boolean,
         default: true
+    },
+    photo: {
+        data: Buffer, // Store image data as buffer
+        contentType: String // Store image content type
     }
 }, {
     collection: "plans",

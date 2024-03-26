@@ -28,6 +28,10 @@ exports.addPlan = asyncErrorHandler(async (req, res, next) => {
     const planObj = {...req.body};
     const advisorId = await Advisor.findOne({userIdCredentials: req.user._id});
     planObj.advisorId = advisorId._id;
+    planObj.photo = {
+        data: new Buffer.from(req.body.photo.data, 'base64'),
+        contentType: req.body.photo.contentType
+    };
 
     const plan = await Plan.create({...planObj});
 
@@ -177,15 +181,24 @@ exports.cummulativeCurrentProfit = asyncErrorHandler(async (req, res, next) => {
     });
 });
 
-exports.deletePlan = asyncErrorHandler(async (req, res, next) => {
-    const planId = req.params.planId;
-    const plan = await Plan.findByIdAndUpdate(planId, {
-        isActive : false
-    }, { new: true });
+// exports.deletePlan = asyncErrorHandler(async (req, res, next) => {
+//     const planId = req.params.planId;
+//     const plan = await Plan.findByIdAndUpdate(planId, {
+//         isActive : false
+//     }, { new: true });
 
-    res.status(200).json({
-        status: 'success',
-        message: "Plan Deleted !!! :) ",
-        plan
-    });
+//     res.status(200).json({
+//         status: 'success',
+//         message: "Plan Deleted !!! :) ",
+//         plan
+//     });
+// })
+
+exports.deletePlan = asyncErrorHandler(async(req, res, next) => {    
+const planId = req.params.planId;    
+const plan = await Plan.findById(planId);         
+// Toggle isActive value
+    plan.isActive = !plan.isActive;    
+    await plan.save();     
+    res.status(200).json({status:'success', message: plan.isActive ?"Plan Activated !!! :)": "Plan Deactivated !!! :(",plan}); 
 })
