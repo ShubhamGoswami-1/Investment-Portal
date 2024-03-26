@@ -24,6 +24,7 @@ exports.register = asyncErrorHandler(async (req, res, next) => {
         },
         address: req.body.address,
         age: req.body.age,
+        phone:req.body.phone,
         gender: req.body.gender,
         jobRole: req.body.jobRole,
         qualification: req.body.qualification,
