@@ -8,6 +8,11 @@ const advisorCategorySchema = new mongoose.Schema({
     subscriptionCharges: {
         type: Map,
         of: Number
+    },
+    category: {
+        type: String,
+        enum: ['Standard', 'Executive', 'Premium'],
+        default: 'Standard'
     }
 }, {
     collection: "advisorCategory",

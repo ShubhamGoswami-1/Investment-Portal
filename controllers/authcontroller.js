@@ -121,7 +121,7 @@ exports.restrictTo = (role) => {
 exports.logout = (req, res, next) => {
     const cookieOptions = {
         expires: new Date(Date.now() - 10 * 1000), // Set to expire 10 seconds ago
-        httpOnly: true
+        httpOnly: false
     };
 
     // Set the cookie 'jwt' with an expired date, effectively deleting it
