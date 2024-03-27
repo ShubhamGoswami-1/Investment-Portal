@@ -39,6 +39,10 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     OAuthId: String,
+    isSSOUser:{
+        type:Boolean,
+        default: false
+    },
     passwordChangedAt: Date,
     passwordResetToken: String,
     passwordResetExpires: Date,
